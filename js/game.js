@@ -161,6 +161,10 @@ function renderLevelChoices() {
 }
 function render() {
   const level = LEVELS[levelIndex];
+  const gameScreen = $("gameScreen");
+  const phraseCard = document.querySelector("#gameScreen .phrase-card");
+  if (gameScreen) gameScreen.classList.toggle("long-phrase-level", level.text.replace(/ /g, "").length >= 18);
+  if (phraseCard) phraseCard.classList.toggle("long-phrase", level.text.replace(/ /g, "").length >= 18);
   $("hintCount").textContent = hintsLeft;
   $("hintBtn").disabled = hintsLeft <= 0;
   $("levelNumber").textContent = levelIndex + 1;
@@ -478,3 +482,105 @@ document.addEventListener("keydown", e => {
 });
 startLevel(0);
 openRulesForFreshStart();
+
+
+/* v53: Measure the actual phrase title and size the game around it.
+   This replaces level-specific pixel hacks for long phrases. */
+let phraseLayoutFrame = null;
+function levelIsLongForLayout() {
+  const level = LEVELS[levelIndex];
+  return !!level && level.text.replace(/\s/g, "").length >= 18;
+}
+function updateResponsivePhraseLayout() {
+  const screen = $("gameScreen");
+  const card = screen?.querySelector(".phrase-card");
+  const title = $("phraseLabel");
+  const cipherArea = screen?.querySelector(".cipher-area");
+  const cipher = $("cipher");
+  const instruction = $("slotInstruction");
+  const controls = screen?.querySelector(".controls");
+  const keyboard = $("keyboard");
+  const navigation = screen?.querySelector(".slot-navigation");
+  if (!screen || !card || !title || !cipherArea || !cipher || !instruction) return;
+
+  const isMobile = window.matchMedia("(max-width: 430px)").matches;
+  screen.classList.remove("dynamic-tall");
+  screen.style.removeProperty("--dynamic-game-height");
+  screen.style.removeProperty("--dynamic-phrase-height");
+  screen.style.removeProperty("--dynamic-title-gap");
+  screen.style.removeProperty("--dynamic-instruction-gap");
+
+  if (!isMobile) return;
+
+  // Read the real rendered title height (including a two-line wrap).
+  const titleHeight = Math.ceil(title.getBoundingClientRect().height);
+  const cipherHeight = Math.max(1, Math.ceil(cipher.scrollHeight));
+  const instructionHeight = Math.ceil(instruction.getBoundingClientRect().height);
+
+  // Small gap after the title, and a slightly larger gap below the slots.
+  const titleGap = 18;
+  const instructionGap = 22;
+  const bottomGap = 18;
+
+  // The phrase card contains: title + gap + slots + gap + instruction + bottom breathing room.
+  const requiredPhraseHeight =
+    titleHeight + titleGap + cipherHeight + instructionGap + instructionHeight + bottomGap;
+
+  // Expand when the rendered title would overlap the slots, or when the
+  // content genuinely needs more height than the compact card provides.
+  const titleRect = title.getBoundingClientRect();
+  const cipherRect = cipher.getBoundingClientRect();
+  const overlap = cipherRect.top < titleRect.bottom + titleGap;
+  const isLongPhrase = levelIsLongForLayout();
+  const compactPhraseHeight = card.getBoundingClientRect().height;
+  if (!overlap && !isLongPhrase && requiredPhraseHeight <= compactPhraseHeight + 2) return;
+
+  const controlsHeight = controls ? Math.ceil(controls.getBoundingClientRect().height) : 0;
+  const keyboardHeight = keyboard ? Math.ceil(keyboard.getBoundingClientRect().height) : 0;
+  const navigationHeight = navigation ? Math.ceil(navigation.getBoundingClientRect().height) : 0;
+
+  // Keep the whole keyboard below the phrase instead of letting it overlap.
+  const requiredGameHeight =
+    requiredPhraseHeight + controlsHeight + keyboardHeight + navigationHeight;
+
+  screen.classList.add("dynamic-tall");
+  screen.style.setProperty("--dynamic-title-gap", `${titleGap}px`);
+  screen.style.setProperty("--dynamic-instruction-gap", `${instructionGap}px`);
+  screen.style.setProperty("--dynamic-phrase-height", `${requiredPhraseHeight}px`);
+
+  const currentHeight = screen.getBoundingClientRect().height;
+  screen.style.setProperty(
+    "--dynamic-game-height",
+    `${Math.max(currentHeight, requiredGameHeight)}px`
+  );
+}
+
+function schedulePhraseLayout() {
+  if (phraseLayoutFrame) cancelAnimationFrame(phraseLayoutFrame);
+  phraseLayoutFrame = requestAnimationFrame(() => {
+    phraseLayoutFrame = null;
+    updateResponsivePhraseLayout();
+  });
+}
+
+const phraseLayoutObserver = window.ResizeObserver
+  ? new ResizeObserver(() => schedulePhraseLayout())
+  : null;
+
+if (phraseLayoutObserver) {
+  const observeLayout = () => {
+    const title = $("phraseLabel");
+    const cipher = $("cipher");
+    if (title) phraseLayoutObserver.observe(title);
+    if (cipher) phraseLayoutObserver.observe(cipher);
+  };
+  window.addEventListener("load", observeLayout);
+}
+
+window.addEventListener("resize", schedulePhraseLayout);
+const originalRenderForLayout = render;
+render = function() {
+  originalRenderForLayout();
+  schedulePhraseLayout();
+};
+schedulePhraseLayout();
