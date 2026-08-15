@@ -1522,3 +1522,11 @@ body { overflow:hidden; }
     margin-top: var(--dynamic-instruction-gap, 22px);
   }
 }
+
+/* v54: lower the phrase label by 30px on mobile while preserving
+   content-driven spacing and preventing overlap with the cipher area. */
+@media (max-width:430px) {
+  #gameScreen.dynamic-tall .hint-label {
+    transform: translateY(30px);
+  }
+}
