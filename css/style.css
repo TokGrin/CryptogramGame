@@ -1449,3 +1449,11 @@ body { overflow:hidden; }
   background: transparent;
   color: inherit;
 }
+
+/* v53: final vertical adjustment */
+#gameScreen .slot-instruction {
+  transform: translateY(-10px);
+}
+#gameScreen .hint-floating {
+  transform: translateY(5px);
+}
