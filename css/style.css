@@ -934,7 +934,7 @@ body { overflow:hidden; }
   transform: translateY(-2px);
 }
 #gameScreen .controls {
-  transform: translateY(-18px);
+  transform: translateY(-28px);
 }
 
 
