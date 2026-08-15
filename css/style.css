@@ -1449,3 +1449,38 @@ body { overflow:hidden; }
   background: transparent;
   color: inherit;
 }
+
+/* v50: phrase title participates in normal layout so it can never overlap the letter slots. */
+#gameScreen .phrase-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  position: relative;
+  padding: 54px 0 0 !important;
+  box-sizing: border-box;
+}
+#gameScreen .hint-label {
+  position: static;
+  flex: 0 0 auto;
+  width: 100%;
+  margin: 0 0 22px;
+  text-align: center;
+  z-index: auto;
+}
+#gameScreen .cipher-area {
+  flex: 1 1 auto;
+  min-height: 0;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+#gameScreen #cipher {
+  flex: 0 0 auto;
+}
+@media (max-width:430px) {
+  #gameScreen .phrase-card { padding-top: 48px !important; }
+  #gameScreen .hint-label { margin-bottom: 18px; }
+}
