@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Криптограмма</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <main class="app">
+    <header class="game-header">
+      <button id="levelsBtn" class="header-icon home-icon" aria-label="Выбор уровня">⌂</button>
+      <div class="errors-block">
+        <div class="errors-title">Ошибки</div>
+        <div id="errorDots" class="error-dots" aria-label="Ошибки"></div>
+      </div>
+      <div class="header-actions">
+        <button id="rulesBtn" class="header-icon info-icon" aria-label="Как играть">i</button>
+        <button id="settingsBtn" class="header-icon settings-icon" aria-label="Настройки">⚙</button>
+      </div>
+    </header>
+
+    <section id="gameScreen" class="screen">
+      <div class="level-caption">Уровень <strong id="levelNumber">1</strong><span class="level-separator"> / </span><strong id="levelTotal">3</strong></div>
+
+      <div class="card phrase-card">
+        <p id="phraseLabel" class="hint-label">Зашифрованная фраза</p>
+        <div class="cipher-area">
+          <div id="cipher" class="cipher" aria-label="Криптограмма"></div>
+          <p id="slotInstruction" class="slot-instruction">Выберите пустую ячейку, затем выберите букву.</p>
+        </div>
+        <div id="message" class="message" aria-live="polite"></div>
+      </div>
+
+      <div class="controls">
+        <button id="hintBtn" class="hint-floating" aria-label="Подсказка">
+          <span class="hint-bulb">💡</span>
+          <span id="hintCount" class="hint-count">3</span>
+        </button>
+      </div>
+
+      <div id="keyboard" class="keyboard" aria-label="Клавиатура"></div>
+
+      <div class="slot-navigation" aria-label="Перемещение по слотам">
+        <button id="prevSlotBtn" class="slot-nav-btn" type="button" aria-label="Предыдущий слот">←</button>
+        <button id="nextSlotBtn" class="slot-nav-btn" type="button" aria-label="Следующий слот">→</button>
+      </div>
+    </section>
+
+    <dialog id="resultScreen" class="result-dialog">
+      <div class="result card">
+        <div id="resultIcon" class="result-icon">✓</div>
+        <h2 id="resultTitle">Уровень пройден!</h2>
+        <p id="resultText"></p>
+        <div id="resultActions" class="result-actions">
+          <button id="resultBtn" class="primary-btn">Следующий уровень</button>
+          <button id="resultRetryBtn" class="secondary-btn hidden">Еще раз</button>
+          <button id="resultLevelsBtn" class="outline-btn hidden">Уровни</button>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <dialog id="levelsDialog" class="levels-dialog">
+    <div class="levels-panel">
+      <h2>Уровни</h2>
+      <div id="levelChoices" class="level-choices"></div>
+      <button id="closeLevels" class="levels-close-btn" aria-label="Закрыть">Закрыть</button>
+    </div>
+  </dialog>
+
+  <dialog id="settingsDialog" class="settings-dialog">
+    <div class="settings-panel">
+      <h2>Настройки</h2>
+      
+      <div class="setting-row">
+        <div>
+          <div class="setting-title">Звук</div>
+          <div class="setting-subtitle">Звуковые эффекты игры</div>
+        </div>
+        <button id="soundBtn" class="sound-switch" aria-label="Звук выключен" aria-pressed="false">
+          <span class="switch-knob"></span>
+        </button>
+      </div>
+      <button id="closeSettings" class="modal-bottom-btn" aria-label="Закрыть">Закрыть</button>
+    </div>
+  </dialog>
+
+  <dialog id="rulesDialog">
+    <div class="rules">
+      <h2>Как играть</h2>
+      
+      <ul>
+        <li>Каждая буква заменена <strong>числом.</strong><br>Одинаковые числа — одинаковые буквы.</li>
+        <li>Нажмите на пропуск, затем на букву. Если угадали — заполнятся <strong>все</strong> такие ячейки.</li>
+        <li>Серые клавиши — буквы, которых нет в этой фразе.</li>
+        <li>Можно сделать <strong>3 ошибки.</strong> Не знаете букву — нажмите 💡 подсказку.</li>
+        <li>Разгадайте всю фразу, чтобы пройти уровень!</li>
+      </ul>
+      <button id="closeRules" class="modal-bottom-btn" aria-label="Понятно">Понятно</button>
+    </div>
+  </dialog>
+
+  <script src="js/game.js"></script>
+</body>
+</html>
