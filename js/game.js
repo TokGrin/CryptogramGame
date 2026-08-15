@@ -206,7 +206,7 @@ function render() {
   // Он меняется только в момент следующего ответа игрока.
   if (!(window.__slotStatusInitialized)) {
     const instruction = $("slotInstruction");
-    if (instruction) instruction.textContent = "Выберите пустую ячейку, затем выберите букву.";
+    if (instruction) instruction.textContent = "Выберите букву";
     window.__slotStatusInitialized = true;
   }
 
@@ -383,7 +383,7 @@ function startLevel(i = levelIndex) {
   levelIndex = i; mistakes = 0; selectedNumber = null; wrongKeys = new Set();
   lastRevealedNumber = null;
   const instruction = $("slotInstruction");
-  if (instruction) instruction.textContent = "Выберите пустую ячейку, затем выберите букву.";
+  if (instruction) instruction.textContent = "Выберите букву";
   solved = new Set();
   const initialLetters = INITIAL_REVEALED[levelIndex] || [];
   const initialMap = levelMap(LEVELS[levelIndex]);

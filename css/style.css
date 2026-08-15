@@ -1382,7 +1382,7 @@ body { overflow:hidden; }
 }
 #gameScreen .slot-instruction {
   width: 100%;
-  margin: 17px 0 0;
+  margin: 37px 0 0;
   padding: 0 12px;
   box-sizing: border-box;
   text-align: center;
@@ -1390,7 +1390,7 @@ body { overflow:hidden; }
 @media (max-width:430px) {
   #gameScreen .hint-label { top: 48px; }
   #gameScreen #cipher { padding: 0 8px; }
-  #gameScreen .slot-instruction { margin-top: 16px; padding: 0 8px; }
+  #gameScreen .slot-instruction { margin-top: 36px; padding: 0 8px; }
 }
 \n\n/* v41: result buttons +40px wider */\n#resultScreen .result-actions #resultBtn,\n#resultScreen .result-actions #resultRetryBtn,\n#resultScreen .result-actions #resultLevelsBtn {\n  width: 310px;\n  min-width: 310px;\n  max-width: 310px;\n}\n
 
@@ -1448,12 +1448,4 @@ body { overflow:hidden; }
 .level-choice.active .level-check {
   background: transparent;
   color: inherit;
-}
-
-/* v53: final vertical adjustment */
-#gameScreen .slot-instruction {
-  transform: translateY(-10px);
-}
-#gameScreen .hint-floating {
-  transform: translateY(5px);
 }
